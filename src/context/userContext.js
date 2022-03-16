@@ -1,11 +1,23 @@
 import { createContext, useState, useEffect } from "react";
-import SignUpModal from '../components/SignUpModal';
+import {
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    onAuthStateChanged
+} from 'firebase/auth'
+import {auth} from '../firebase.config'
 
 
 export const UserContext = createContext()
 
 export function UserContextProvider(props) {
 
+    const [currentUser, setCurrentUser] = useState()
+    const [loadingData, setLoadingData] = useState(true)
+
+    const signUp = (email, password) => createUserWithEmailAndPassword (auth, email, password)
+
+
+    // partie modal
     const [modalState, setModalState] =useState({
         signUpModal: false,
         signInModal: false
@@ -33,7 +45,7 @@ export function UserContextProvider(props) {
     }
     
     return (
-        <UserContext.Provider value={{modalState, toggleModal}}>
+        <UserContext.Provider value={{modalState, toggleModal, signUp}}>
             {props.children}
         </UserContext.Provider>
     )
