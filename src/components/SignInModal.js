@@ -1,9 +1,10 @@
 import { useContext, useRef, useState } from "react";
 import { UserContext } from '../context/userContext';
 import {useNavigate} from 'react-router-dom'
-function SignUpModal() {
 
-    const {modalState, toggleModal, signUp} =useContext(UserContext)
+function SignInModal() {
+
+    const {modalState, toggleModal, signIn} =useContext(UserContext)
     const [validation, setValidation] = useState("")
     // console.log(signUp)
     let navigate = useNavigate()
@@ -19,30 +20,24 @@ function SignUpModal() {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        if((inputs.current[1].value.length || inputs.current[2].value.length ) < 6){
-            setValidation("6 characters min")
-            return
-        }
-        if(inputs.current[1].value !== inputs.current[2].value){
-            setValidation(" password do not match")
-            return
-        }
+
         try {
-            await signUp(
+            await signIn(
                 inputs.current[0].value,
                 inputs.current[1].value
             )
+            // a tester
             formRef.current.reset()
             setValidation("")
             // console.log(credencial)
             navigate("/private/private-home")
             toggleModal("close")
         } catch (error) {
-                let newFormatErreur = error.code.split("").splice(5,error.code.length).join("").replace('-', ' ').replace('-', ' ').replace('-', ' ')
-                setValidation(newFormatErreur)
+                // let newFormatErreur = error.code.split("").splice(5,error.code.length).join("").replace('-', ' ').replace('-', ' ').replace('-', ' ')
+                // setValidation(newFormatErreur)
+                setValidation("email and/or password incorrect")
             // console.dir(error.code)
         }
-        console.log(inputs)
     }
     const closeModal = () =>{
         setValidation("")
@@ -50,7 +45,7 @@ function SignUpModal() {
     }
     return (
         <>
-            {modalState.signUpModal && 
+            {modalState.signInModal && 
             
                 (<div className="position-absolute bg-dark bg-opacity-50 top-0 vw-100 vh-100">
                     <div className="vw-100 vh-100 ">
@@ -58,7 +53,7 @@ function SignUpModal() {
                             <div className="modal-dialog">
                                 <div className="modal-content">
                                     <div className="modal-header">
-                                        <h5 className="modal-title">Sign Up</h5>
+                                        <h5 className="modal-title">Sign In</h5>
                                         <button onClick={closeModal} className="btn-close"></button>
                                     </div>
 
@@ -66,42 +61,33 @@ function SignUpModal() {
                                         <form
                                             ref={formRef}
                                             onSubmit={handleSubmit}
-                                            className="sign-up-form">
+                                            className="sign-up-form"
+                                        >
+
                                             <div className="mb-3">
-                                                <label htmlFor="signUpEmail" className="form-label" >Email adress</label>
+                                                <label htmlFor="signInEmail" className="form-label" >Email adress</label>
                                                 <input 
                                                     ref={addInputs}
                                                     required
                                                     type="email" 
                                                     name='email'
-                                                    id="signUpEmail"
+                                                    id="signInEmail"
                                                     className="form-control" 
                                                 />
                                             </div>
                                         
                                             <div className="mb-3">
-                                                <label htmlFor="signUpPassword" className="form-label" >Password</label>
+                                                <label htmlFor="signInPassword" className="form-label" >Password</label>
                                                 <input 
                                                     ref={addInputs}
                                                     required
                                                     type="Password" 
                                                     name='Password'
-                                                    id="signUpPassword"
+                                                    id="signInPassword"
                                                     className="form-control" 
                                                 />
                                             </div>
 
-                                            <div className="mb-3">
-                                                <label htmlFor="RepeatPassword" className="form-label" >Repeat Password</label>
-                                                <input 
-                                                    ref={addInputs}
-                                                    required
-                                                    type="Password" 
-                                                    name='Password'
-                                                    id="RepeatPassword"
-                                                    className="form-control" 
-                                                />
-                                            </div>
                                             <p className="text-danger mt-1">{validation} </p>
                                             <button className="btn btn-primary">Submit</button>
                                         </form>
@@ -116,4 +102,4 @@ function SignUpModal() {
     )
 }
 
-export default SignUpModal
+export default SignInModal

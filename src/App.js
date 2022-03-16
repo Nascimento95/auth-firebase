@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import NavBar from "./components/NavBar";
 import SignUpModal from "./components/SignUpModal";
+import SignInModal from "./components/SignInModal";
 import Private from "./pages/private/Private";
 import PrivateHome from "./pages/private/privateHome/PrivateHome";
 
@@ -16,6 +17,7 @@ const App = () => {
         </Route>
       </Routes>
       <SignUpModal />
+      <SignInModal />
     </>
   );
 };
